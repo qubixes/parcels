@@ -1,6 +1,6 @@
 from parcels import (
     FieldSet, ParticleSet, ScipyParticle, JITParticle, ErrorCode, KernelError,
-    OutOfBoundsError
+    OutOfBoundsError, Variable
 )
 import numpy as np
 import pytest
@@ -80,6 +80,24 @@ def test_pset_execute_dt_0(fieldset, mode, time, dt, npart=2):
     assert np.allclose([p.lon for p in pset], lon)
     assert np.allclose([p.lat for p in pset], [.6])
     assert np.allclose([p.time for p in pset], min([time, dt]))
+
+
+@pytest.mark.parametrize('mode', ['scipy', 'jit'])
+@pytest.mark.parametrize('dt', [-1, 1])
+def test_change_dt_in_kernel(fieldset, mode, dt):
+
+    class KernelCounter(ptype[mode]):
+        numberofkernelcalls = Variable('numberofkernelcalls')
+
+    def Changedt(particle, fieldset, time):
+        particle.dt *= 2.
+        particle.numberofkernelcalls += 1.
+
+    pset = ParticleSet(fieldset, pclass=KernelCounter, lon=0, lat=0)
+    runtime = 10
+    pset.execute(Changedt, runtime=runtime, dt=dt)
+
+    assert pset[0].numberofkernelcalls == np.ceil(np.log2(runtime))
 
 
 @pytest.mark.parametrize('mode', ['scipy', 'jit'])
