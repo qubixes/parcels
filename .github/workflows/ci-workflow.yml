@@ -1,0 +1,11 @@
+name: test-suite
+on: [push pull-request]
+jobs:
+  PytestLinux:
+    name: Github Action for testing on Linux
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Github Action for testing on Linux
+      run: pip install .
+      #uses: ./.github/actions/linux_test
