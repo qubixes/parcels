@@ -11,7 +11,7 @@ jobs:
 
     - uses: actions/checkout@master
     - name: Install linux
-      with: 
+      env: 
         MINICONDA_NAME=Miniconda3-latest-Linux-x86_64.sh
       run: ./.github/scripts/linux_install.sh
     - name: Github Action for testing on Linux
