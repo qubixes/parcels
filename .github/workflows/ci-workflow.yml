@@ -38,3 +38,4 @@ jobs:
         ./.github/scripts/windows_install.ps1
         ./.github/scripts/windos_test.ps1
       shell: powershell
+      
