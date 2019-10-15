@@ -1,52 +1,40 @@
 name: test-suite
-on: [push pull-request]
+on: [push, pull-request]
 jobs:
-  PytestLinux:
-    name: Github Action for testing on Linux
-    runs-on: ubuntu-latest
+  test:
+    name: Github Action for testing across platforms
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [osx, windows-2016, ubuntu-latest]
     env:
       PY_VERSION=3
-      OS_NAME=linux
     steps:
     - uses: actions/checkout@master
-    - name: Install Linux
-      shell: bash
+    - name: Test linux
+      if: matrix.os == 'ubuntu-latest'
       env: 
+        OS_NAME=linux
         MINICONDA_NAME=Miniconda3-latest-Linux-x86_64.sh
-      run: ./.github/scripts/linux_install.sh
-    - name: Github Action for testing on Linux
+      run: |
+        ./.github/scripts/linux_install.sh
+        ./.github/scripts/linux_test.sh
       shell: bash
-      run: ./.github/scripts/linux_test.sh
-  PytestOSX:
-    name: Github Action for testing on OSX
-    runs-on: ubuntu-latest
-    env:
-      PY_VERSION=3
-      OS_NAME=linux
-    steps:
-    - uses: actions/checkout@master
-    - name: Install OSX
-      shell: bash
+    - name: Test OSX
+      if: matrix.os == 'osx'
       env: 
+        OS_NAME=osx
         MINICONDA_NAME=Miniconda3-latest-MacOSX-x86_64.sh
-      run: ./.github/scripts/linux_install.sh
-    - name: Github Action for testing on Linux
+      run: |
+        ./.github/scripts/linux_install.sh
+        ./.github/scripts/osx_test.sh
       shell: bash
-      run: ./.github/scripts/osx_test.sh
-  PytestWindows:
-    name: Github Action testing on Windows:
-    runs-on: windows-2016
-    env:
-      PY_VERSION=3
-      OS_NAME=Windows
-    steps:
-    - uses: actions/checkout@master
-    - name: Conda install windows
+    - name: Test Windows
+      if: matrix.os == 'windows-2016'
+      env: 
+        OS_NAME=win
+      run: |
+        ./.github/scripts/install_miniconda.ps1
+        ./.github/scripts/windows_install.ps1
+        ./.github/scripts/windos_test.ps1
       shell: powershell
-      run: ./.github/scripts/install_miniconda.ps1
-    - name: Install on Windows
-      shell: powershell
-      run: ./.github/scripts/windows_install.ps1
-    - name: Run tests on Windows
-      shell: powershell
-      run: ./.github/scripts/windos_test.ps1
