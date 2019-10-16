@@ -8,14 +8,14 @@ jobs:
       matrix:
         os: [osx, windows-2016, ubuntu-latest]
     env:
-      PY_VERSION=3
+      PY_VERSION: 3
     steps:
     - uses: actions/checkout@master
     - name: Test linux
       if: matrix.os == 'ubuntu-latest'
       env: 
-        OS_NAME=linux
-        MINICONDA_NAME=Miniconda3-latest-Linux-x86_64.sh
+        OS_NAME: linux
+        MINICONDA_NAME: Miniconda3-latest-Linux-x86_64.sh
       run: |
         ./.github/scripts/linux_install.sh
         ./.github/scripts/linux_test.sh
@@ -23,8 +23,8 @@ jobs:
     - name: Test OSX
       if: matrix.os == 'osx'
       env: 
-        OS_NAME=osx
-        MINICONDA_NAME=Miniconda3-latest-MacOSX-x86_64.sh
+        OS_NAME: osx
+        MINICONDA_NAME: Miniconda3-latest-MacOSX-x86_64.sh
       run: |
         ./.github/scripts/linux_install.sh
         ./.github/scripts/osx_test.sh
@@ -32,7 +32,7 @@ jobs:
     - name: Test Windows
       if: matrix.os == 'windows-2016'
       env: 
-        OS_NAME=win
+        OS_NAME: win
       run: |
         ./.github/scripts/install_miniconda.ps1
         ./.github/scripts/windows_install.ps1
