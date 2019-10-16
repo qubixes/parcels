@@ -6,7 +6,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [osx, windows-2016, ubuntu-latest]
+        os: [macOS-latest, windows-2016, ubuntu-latest]
     env:
       PY_VERSION: 3
     steps:
@@ -21,7 +21,7 @@ jobs:
         ./.github/scripts/linux_test.sh
       shell: bash
     - name: Test OSX
-      if: matrix.os == 'osx'
+      if: matrix.os == 'macOS-latest'
       env: 
         OS_NAME: osx
         MINICONDA_NAME: Miniconda3-latest-MacOSX-x86_64.sh
