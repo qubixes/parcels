@@ -5,6 +5,7 @@ jobs:
     name: Github Action for testing across platforms
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false 
       matrix:
         os: [macOS-latest, windows-2016, ubuntu-latest]
     env:
