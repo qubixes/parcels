@@ -1,0 +1,44 @@
+name: test-suite
+on: [push, pull_request]
+jobs:
+  test:
+    name: Github Action for testing across platforms
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false 
+      matrix:
+        os: [macOS-latest, windows-2016, ubuntu-latest]
+    env:
+      PY_VERSION: 3
+    steps:
+    - uses: actions/checkout@master
+    - name: Test linux
+      if: matrix.os == 'ubuntu-latest'
+      env: 
+        OS_NAME: linux
+        MINICONDA_NAME: Miniconda3-latest-Linux-x86_64.sh
+      run: |
+        ./.github/scripts/linux_install.sh
+        ./.github/scripts/linux_test.sh
+      shell: bash
+    - name: Test OSX
+      if: matrix.os == 'macOS-latest'
+      env: 
+        OS_NAME: osx
+        MINICONDA_NAME: Miniconda3-latest-MacOSX-x86_64.sh
+      run: |
+        ./.github/scripts/linux_install.sh
+        ./.github/scripts/osx_test.sh
+      shell: bash
+    - name: Test Windows
+      if: matrix.os == 'windows-2016'
+      env: 
+        OS_NAME: win
+        PYTHON_ARCH: 64
+        PYTHON: "C:\\Miniconda36-x64"
+      run: |
+        ./.github/scripts/install_miniconda.ps1
+        ./.github/scripts/windows_install.ps1
+        ./.github/scripts/windos_test.ps1
+      shell: powershell
+      
