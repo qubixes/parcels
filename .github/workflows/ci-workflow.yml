@@ -1,5 +1,8 @@
 name: test-suite
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+    - master
 jobs:
   test:
     name: Github Action for testing across platforms
