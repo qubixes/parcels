@@ -1,4 +1,5 @@
 #!/bin/bash
+export PATH="$HOME/miniconda/bin:$PATH"
 
 # Set up display to be able to plot in linux
 export DISPLAY=:99.0;
