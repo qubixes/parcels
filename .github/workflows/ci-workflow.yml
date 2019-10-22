@@ -41,7 +41,7 @@ jobs:
         PYTHON: "C:\\Miniconda36-x64"
       run: |
         ./.github/scripts/install_miniconda.ps1
-        ./.github/scripts/windows_install.ps1
-        ./.github/scripts/windows_test.ps1
+        ./.github/scripts/windows_install.bat
+        ./.github/scripts/windos_test.ps1
       shell: powershell
       
