@@ -39,6 +39,7 @@ jobs:
         OS_NAME: win
         PYTHON_ARCH: 64
         PYTHON: "C:\\Miniconda36-x64"
+        ENV_NAME: "environment_py3_win.yml"
       run: |
         ./.github/scripts/install_miniconda.ps1
         ./.github/scripts/windows_install.bat
