@@ -1,5 +1,8 @@
 name: test-suite
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+    - master
 jobs:
   test:
     name: Github Action for testing across platforms
@@ -39,6 +42,6 @@ jobs:
       run: |
         ./.github/scripts/install_miniconda.ps1
         ./.github/scripts/windows_install.ps1
-        ./.github/scripts/windos_test.ps1
+        ./.github/scripts/windows_test.ps1
       shell: powershell
       
