@@ -1,5 +1,8 @@
 name: test-suite
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+    - master
 jobs:
   test:
     name: Github Action for testing across platforms
@@ -35,10 +38,10 @@ jobs:
       env: 
         OS_NAME: win
         PYTHON_ARCH: 64
-        PYTHON: "C:\\Miniconda36-x64"
+        PYTHON: C:\Miniconda36-x64
       run: |
         ./.github/scripts/install_miniconda.ps1
-        ./.github/scripts/windows_install.ps1
-        ./.github/scripts/windos_test.ps1
+        ./.github/scripts/windows_install.bat
+        ./.github/scripts/windows_test.bat
       shell: powershell
       
