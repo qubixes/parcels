@@ -5,7 +5,7 @@ on:
     - master
 jobs:
   test:
-    name: Github Action for testing across platforms
+    name: Build and test
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false 
