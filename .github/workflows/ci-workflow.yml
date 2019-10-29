@@ -4,7 +4,7 @@ on:
     branches:
     - master
 jobs:
-  test macOS:
+  test_macOS:
     name: Testing on macOS
     runs-on: macOS-latest
     steps:  
@@ -18,7 +18,7 @@ jobs:
           ./.github/scripts/linux_install.sh
           ./.github/scripts/osx_test.sh
         shell: bash
-  test linux:
+  test_linux:
     name: Testing on Linux
     runs-on: ubuntu-latest
     steps: 
@@ -32,7 +32,7 @@ jobs:
           ./.github/scripts/linux_install.sh
           ./.github/scripts/linux_test.sh
         shell: bash
-  test windows:
+  test_windows:
     name: Testing on Windows
     runs-on: windows-2016
     steps:
