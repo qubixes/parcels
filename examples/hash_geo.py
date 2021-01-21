@@ -3,10 +3,10 @@ from math import ceil
 import numpy as np
 
 from geo_utils import fast_distance
-from base_neighbor import BaseNeighborSearch
+from base_neighbor import BaseNeighborSearchGeo
 
 
-class HashGeoNSearch(BaseNeighborSearch):
+class HashGeoNSearch(BaseNeighborSearchGeo):
     '''Neighbor search using a hashtable (similar to octtrees).'''
     def __init__(self, values, max_dist):
         super(HashGeoNSearch, self).__init__(values, max_dist)

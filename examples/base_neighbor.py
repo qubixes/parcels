@@ -25,35 +25,26 @@ class BaseNeighborSearch(ABC):
         def bench_init(values, max_dist):
             return cls(values, max_dist)
 
-        def bench_search(neigh_search):
-            n_found = 0
-            for i in range(neigh_search._values.shape[1]):
-                n_found += len(neigh_search.find_neighbors(i))
-            return n_found
-
-        def create_positions(n_particles):
-            yrange = 2*np.random.rand(n_particles)
-            lat = np.arccos(1-yrange)-0.5*np.pi
-            long = 2*np.pi*np.random.rand(n_particles)
-            return np.array((lat, long))
+        def bench_search(neigh_search, n_sample):
+            for particle_id in np.random.randint(neigh_search._values.shape[1], size=n_sample):
+                neigh_search.find_neighbors(particle_id)
 
         all_dt_init = []
         all_dt_search = []
         all_n_particles = []
         n_particles = 30
         n_init = 100
-        n_search = 100
         while n_particles < max_n_particles:
-            max_dist = 4*np.pi/(n_particles*density)
+            max_dist = np.sqrt(density*cls.area/(n_particles))
+            n_sample = min(5000, 10*n_particles)
             if n_particles > 5000:
                 n_init = 10
-                n_search = 1
-            positions = create_positions(n_particles)
+            positions = cls.create_positions(n_particles)
             dt_init = timeit(lambda: bench_init(positions, max_dist),
                              number=n_init)/n_init
             neigh_search = bench_init(positions, max_dist)
-            dt_search = timeit(lambda: bench_search(neigh_search),
-                               number=n_search)/n_search
+            dt_search = timeit(lambda: bench_search(neigh_search, n_sample),
+                               number=1)/n_sample
             all_dt_init.append(dt_init)
             all_dt_search.append(dt_search)
             all_n_particles.append(n_particles)
@@ -61,3 +52,27 @@ class BaseNeighborSearch(ABC):
         return {"n_particles": np.array(all_n_particles),
                 "init_time": np.array(all_dt_init),
                 "search_time": np.array(all_dt_search)}
+
+    @classmethod
+    @abstractmethod
+    def create_positions(cls, n_particles):
+        pass
+
+
+class BaseNeighborSearchGeo(BaseNeighborSearch):
+    area = 4*np.pi
+
+    @classmethod
+    def create_positions(cls, n_particles):
+        yrange = 2*np.random.rand(n_particles)
+        lat = np.arccos(1-yrange)-0.5*np.pi
+        long = 2*np.pi*np.random.rand(n_particles)
+        return np.array((lat, long))
+
+
+class BaseNeighborSearchCart(BaseNeighborSearch):
+    area = 1
+
+    @classmethod
+    def create_positions(cls, n_particle):
+        return np.random.rand(n_particle*2).reshape(2, -1)

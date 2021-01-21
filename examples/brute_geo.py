@@ -1,10 +1,10 @@
 import numpy as np
 
 from geo_utils import fast_distance
-from base_neighbor import BaseNeighborSearch
+from base_neighbor import BaseNeighborSearchCart
 
 
-class BruteGeoNSearch(BaseNeighborSearch):
+class BruteGeoNSearch(BaseNeighborSearchCart):
     '''Brute force implementation to find the neighbors.'''
     def find_neighbors(self, particle_id):
         distances = fast_distance(*self._values[:, particle_id],
