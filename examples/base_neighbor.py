@@ -5,6 +5,8 @@ from timeit import timeit
 
 
 class BaseNeighborSearch(ABC):
+    name = "unknown"
+
     def __init__(self, values, max_dist):
         self._values = values
         self.max_dist = max_dist
@@ -18,7 +20,7 @@ class BaseNeighborSearch(ABC):
         self._values = new_values
 
     @classmethod
-    def benchmark(cls, density=1, max_n_particles=1000):
+    def benchmark(cls, max_n_particles=1000, density=1):
         '''Perform benchmarks to figure out scaling with particles.'''
         np.random.seed(213874)
 
@@ -26,7 +28,8 @@ class BaseNeighborSearch(ABC):
             return cls(values, max_dist)
 
         def bench_search(neigh_search, n_sample):
-            for particle_id in np.random.randint(neigh_search._values.shape[1], size=n_sample):
+            for particle_id in np.random.randint(neigh_search._values.shape[1],
+                                                 size=n_sample):
                 neigh_search.find_neighbors(particle_id)
 
         all_dt_init = []
@@ -49,14 +52,29 @@ class BaseNeighborSearch(ABC):
             all_dt_search.append(dt_search)
             all_n_particles.append(n_particles)
             n_particles *= 2
-        return {"n_particles": np.array(all_n_particles),
-                "init_time": np.array(all_dt_init),
-                "search_time": np.array(all_dt_search)}
+        return {
+            "name": cls.name,
+            "n_particles": np.array(all_n_particles),
+            "init_time": np.array(all_dt_init),
+            "search_time": np.array(all_dt_search)}
 
     @classmethod
     @abstractmethod
     def create_positions(cls, n_particles):
         pass
+
+
+class BaseNeighborSearchGeo3D(BaseNeighborSearch):
+    area = 4*np.pi
+    max_depth = 0.01
+
+    @classmethod
+    def create_positions(cls, n_particles):
+        yrange = 2*np.random.rand(n_particles)
+        lat = np.arccos(1-yrange)-0.5*np.pi
+        long = 2*np.pi*np.random.rand(n_particles)
+        depth = cls.max_depth*np.random.rand(n_particles)
+        return np.array((lat, long, depth))
 
 
 class BaseNeighborSearchGeo(BaseNeighborSearch):
